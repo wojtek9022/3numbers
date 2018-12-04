@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+    
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+        <title>Gra w 3 liczby</title>
+        <link rel="stylesheet" href="style.css">
+    
+    
+    </head>
+
+    <body>
+        <div id="main">
+            <div id="screen">
+                <p id="liczba1"></p>
+                <p id="liczba2"></p>
+                <p id="liczba3"></p>
+            </div>
+            <div id="menu">
+                <input id="odejmowanie" type="text" onchange="takeNums()" placeholder="Tutaj wpisz liczbę, którą chcesz odjąć."> <br/>
+                <input id="odLiczby" type="text" onchange="takeNums()" placeholder="Tutaj wpisz liczbę od której chcesz odjąć."> <br/>
+                <button id="select" onclick="selectChoice()">Gotowe!</button> <br/>
+                <button id="restartButton" onclick="restartGame()">Restart</button>
+            </div>
+            <div id="starterpack">
+                <p id="graczol">Zaczyna gracz nr 1!</p>
+            </div>
+            <div id="rules">
+                <p id="rulestitle"> ZASADY GRY </p>
+                <ul>
+                    <li>Mamy trzy losowe liczby kolejno numerowane od lewej 1, 2, 3</li> <br/>
+                    <li>W pierwszym oknie należy wpisać liczbę, którą chcemy odjąć od liczby o numerze X</li> <br/>
+                    <li>W drugim oknie należy wpisać, od której cyfry chcemy coś odjąć</li> <br/>
+                    <li>Gracze odejmują liczby naprzemiennie</li> <br/>
+                    <li>Przegrywa gracz, który bierze ostatnią jedynkę</li> <br/>
+                </ul>
+            </div>
+        </div>
+    
+    <script>
+        var box1, box2;
+        var digit = [0,0,0];
+        var result;
+        var nrgracza = 1;
+        var binary1, binary2, binary3;
+        var binbot1 = [];
+        var binbot2 = [];
+        var binbot3 = [];
+        
+        //Generuje numery i przypisuje je zmiennym x,y,z i wywoluje funkcje checkNums()
+        function genNum(){
+            var x = Math.floor(Math.random() * 13) + 13
+            var y = Math.floor(Math.random() * 12) + 14
+            var z = Math.floor(Math.random() * 16) + 11
+            checkNums(x,y,z);
+        }
+
+        //Sprawdza czy któraś z cyfr się powtarza, jeśli tak odwołuje się do funkcji genNum()
+        function checkNums(x,y,z){
+            if (x==y || x==z || z==y){
+                genNum();
+            }
+            else{
+                document.getElementById("liczba1").innerHTML = x;
+                document.getElementById("liczba2").innerHTML = y;
+                document.getElementById("liczba3").innerHTML = z;
+                digit[0] = x; digit[1] = y; digit[2] = z;
+            }
+        }
+        
+        //Przypisuje poprzedni wynik do odpowiedniej liczby
+        function updNum(box2){
+                digit[box2-1] = result;
+        }
+        
+        //Pobiera numery z inputów i przypisuje je do zmiennych box1,box2
+        function takeNums(){
+            box1 = parseInt(document.getElementById("odejmowanie").value);
+            box2 = parseInt(document.getElementById("odLiczby").value);
+        }
+        
+        //Sprawdza czy liczba jest mniejsza od 0, jeśli tak ustawia ją na 0
+        function minZero(result){
+            if(result<0){
+                result = 0;
+                document.getElementById("liczba"+(box2)).innerHTML = result;
+                digit[box2-1] = result;
+            }
+        }
+        
+        //Sprawdza którego gracza jest kolej
+        function playerChecker(){
+            nrgracza++;
+            if(nrgracza%2==0){
+                document.getElementById("graczol").innerHTML = "Kolej gracza nr 2";
+            }
+            else{
+                document.getElementById("graczol").innerHTML = "Kolej gracza nr 1";
+            }
+        }
+        
+        //Sprawdza kto wygrał
+        function winChecker(){
+            if(digit[0]==1 && digit[1]==0 && digit[2]==0){
+                if(nrgracza%2==0){
+                    document.getElementById("graczol").innerHTML = "Wygrywa gracz numer 1";
+                }
+                else{
+                    document.getElementById("graczol").innerHTML = "Wygrywa gracz numer 2";
+                }
+            }
+            else if(digit[0]==0 && digit[1]==1 && digit[2]==0){
+                if(nrgracza%2==0){
+                    document.getElementById("graczol").innerHTML = "Wygrywa gracz numer 1";
+                }
+                else{
+                    document.getElementById("graczol").innerHTML = "Wygrywa gracz numer 2";
+                }
+            }
+            else if(digit[0]==0 && digit[1]==0 && digit[2]==1){
+                if(nrgracza%2==0){
+                    document.getElementById("graczol").innerHTML = "Wygrywa gracz numer 1";
+                }
+                else{
+                    document.getElementById("graczol").innerHTML = "Wygrywa gracz numer 2";
+                }
+            }
+        }
+        
+        //Oblicza i podmienia liczbę która została wskazana, odnosi się do funkcji updNum() oraz minZero()
+        function selectChoice(){
+            console.log(box1);
+            console.log(box2);
+            result = digit[box2-1] - box1;
+            console.log(result);
+            document.getElementById("liczba"+(box2)).innerHTML = result;
+            updNum(box2);
+            minZero(result);
+            toBinary();
+            playerChecker();
+            winChecker();
+            
+        }
+        
+        //Restartuje grę
+        function restartGame(){
+            genNum();
+            nrgracza = 1;
+            document.getElementById("graczol").innerHTML = "Zaczyna gracz nr 1!";
+            document.getElementById("odejmowanie").value = "";
+            document.getElementById("odLiczby").value = "";
+        }
+        
+        //Zamienia liczby na binarne
+        function toBinary(){
+            binary1 = digit[0].toString(2);
+            binary2 = digit[1].toString(2);
+            binary3 = digit[2].toString(2);
+            console.log(binary1, binary2, binary3);
+        }
+        
+        function botFirstTry(){
+            var lengt1 = binary1.length;
+            var lengt2 = binary2.length;
+            var lengt3 = binary3.length;
+            var loopcount = 0;
+            
+            for(i=0; i<lengt1; i++;){
+                
+            }
+        }
+        
+        
+        
+          
+        genNum();
+        console.log(digit[0], digit[1], digit[2]);
+        
+    </script>    
+
+    </body>
+    
+</html>

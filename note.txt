@@ -1,0 +1,20 @@
+Bot:
+    - Sprawdza długosc wyrazu
+    - Sprawdza kolejno na której pozycji znajduje się jedynka w każdym z wyrazów
+    - Przypisuje każdą z pozycji do tablicy
+    - Sprawdza ilość jedynek w każdym z wyrazów
+    - Sumuje wszystkie jedynki i sprawdza parzystość:
+        - jeśli jest parzysta to trzeba odjąć 2 jedynki od któregoś z wyrazów,
+        - jeśli nieparzysta to trzeba odjąć 1 jedynkę od któregoś z wyrazów
+    - losuje wyraz od którego będzie odejmować jedynki
+    - odejmuje jedynkę/ki
+    - sprawdza czy po odjęciu liczba nie wynosi 0:
+        - jeśli wynosi 0 to nie odejmuje od tej liczby na stałe,
+        - jeśli wynosi więcej niż 0 to zamienia liczbę na stałe
+        
+        
+        
+        
+Mam stworzone tablice binbot1, binbot2, binbot3 oraz zmianne binary1,2,3.
+Binary zawiera w sobie trzy liczby binarne jako string.
+Po pobraniu długości każdego z wyrazów w funkcji botFirstTry muszę w pętli przypisać każdej z tablic binbot liczby ze stringów.
